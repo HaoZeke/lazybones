@@ -17,6 +17,10 @@ The exact goals are simple:
 - Update `sdkman` binary
 - _(optional)_ Add templates
 
+## Running
+
+At the moment the **project requires** JDK 8.
+
 # Lazybones Project Creation Tool
 
 Lazybones was born out of frustration that [Ratpack](https://ratpack.io)
