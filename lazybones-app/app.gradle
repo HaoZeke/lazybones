@@ -21,7 +21,7 @@ plugins {
 
 apply plugin: "groovy"
 apply plugin: "application"
-apply plugin: "codenarc"
+// apply plugin: "codenarc"
 
 applicationName = "lazybones"
 mainClassName = "uk.co.cacoethes.lazybones.LazybonesMain"
@@ -178,55 +178,55 @@ task packageReports(type: Zip) {
 
 integTest.finalizedBy packageReports
 
-codenarc {
-    configFile = rootProject.file("codenarc.groovy")
-}
-codenarcMain.excludes = ["**/NameType.groovy"]
-codenarcTest.enabled = false
-codenarcIntegTest.enabled = false
+// codenarc {
+//     configFile = rootProject.file("codenarc.groovy")
+// }
+// codenarcMain.excludes = ["**/NameType.groovy"]
+// codenarcTest.enabled = false
+// codenarcIntegTest.enabled = false
 
-/** Cobertura (Coverage) Configuration */
-cobertura {
-    coverageFormats = ['html', 'xml']
-    coverageSourceDirs = sourceSets.main.allSource.srcDirs
-}
+// /** Cobertura (Coverage) Configuration */
+// cobertura {
+//     coverageFormats = ['html', 'xml']
+//     coverageSourceDirs = sourceSets.main.allSource.srcDirs
+// }
 
-distZip.dependsOn("test", "integTest")
-check.dependsOn("test", "integTest")
+// distZip.dependsOn("test", "integTest")
+// check.dependsOn("test", "integTest")
 
-task uploadDist(type: BintrayGenericUpload, dependsOn: "distZip") {
-    artifactFile = distZip.archivePath
-    artifactUrlPath = "lazybones/${version}/${distZip.archiveName}"
-    repositoryName = "pledbrook/lazybones-templates"
-    packageName = "lazybones"
-    licenses = ["Apache-2.0"]
-}
+// task uploadDist(type: BintrayGenericUpload, dependsOn: "distZip") {
+//     artifactFile = distZip.archivePath
+//     artifactUrlPath = "lazybones/${version}/${distZip.archiveName}"
+//     repositoryName = "pledbrook/lazybones-templates"
+//     packageName = "lazybones"
+//     licenses = ["Apache-2.0"]
+// }
 
-task release(dependsOn: ["uploadDist", "sdkMajorRelease"])
-sdkMajorRelease.mustRunAfter uploadDist
+// task release(dependsOn: ["uploadDist", "sdkMajorRelease"])
+// sdkMajorRelease.mustRunAfter uploadDist
 
-// Lazy initialisation of uploadDist task so that not all build users need to
-// set the repo.* project properties.
-//
-// We also lazily configure the cache directory system property when running
-// the integration tests. This is to ensure that the test-tmpl template gets
-// installed into the cache directory being used by the integration tests.
-gradle.taskGraph.whenReady { graph ->
-    if (graph.hasTask(":lazybones-app:uploadDist")) {
-        verifyProperty(project, 'repo.username')
-        verifyProperty(project, 'repo.apiKey')
+// // Lazy initialisation of uploadDist task so that not all build users need to
+// // set the repo.* project properties.
+// //
+// // We also lazily configure the cache directory system property when running
+// // the integration tests. This is to ensure that the test-tmpl template gets
+// // installed into the cache directory being used by the integration tests.
+// gradle.taskGraph.whenReady { graph ->
+//     if (graph.hasTask(":lazybones-app:uploadDist")) {
+//         verifyProperty(project, 'repo.username')
+//         verifyProperty(project, 'repo.apiKey')
 
-        uploadDist.username = project.'repo.username'
-        uploadDist.apiKey = project.'repo.apiKey'
-    }
+//         uploadDist.username = project.'repo.username'
+//         uploadDist.apiKey = project.'repo.apiKey'
+//     }
 
-    if (graph.hasTask(":lazybones-app:sdkMajorRelease")) {
-        verifyProperty(project, 'gvm.consumerKey')
-        verifyProperty(project, 'gvm.consumerToken')
-        sdkMajorRelease.consumerKey = project.'gvm.consumerKey'
-        sdkMajorRelease.consumerToken = project.'gvm.consumerToken'
-    }
-}
+//     if (graph.hasTask(":lazybones-app:sdkMajorRelease")) {
+//         verifyProperty(project, 'gvm.consumerKey')
+//         verifyProperty(project, 'gvm.consumerToken')
+//         sdkMajorRelease.consumerKey = project.'gvm.consumerKey'
+//         sdkMajorRelease.consumerToken = project.'gvm.consumerToken'
+//     }
+// }
 
 void verifyProperty(Project proj, String name) {
     if (!project.hasProperty(name)) {
