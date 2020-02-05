@@ -19,7 +19,12 @@ The exact goals are simple:
 
 ## Running
 
-At the moment the **project requires** JDK 8.
+Details are [in the wiki](https://gitlab.com/HaoZeke/hbv204m/-/wikis/Software-Quality-Management-Plan#build-system), but generally, given the right JVM (13), you should be
+able to simply use the wrapper:
+
+```sh
+./gradlew
+```
 
 # Lazybones Project Creation Tool
 
