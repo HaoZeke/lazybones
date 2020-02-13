@@ -17,6 +17,7 @@ plugins {
     id "net.saliman.cobertura" version "2.2.7"
     id "uk.co.cacoethes.lazybones-templates" version "1.2.3"
     id "io.sdkman.vendors" version "1.1.0"
+    id 'jacoco'
 }
 
 apply plugin: "groovy"
