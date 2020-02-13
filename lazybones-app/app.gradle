@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         // Keep this for testing dev versions of the lazybones-templates plugin
-//        classpath "uk.co.cacoethes:lazybones-gradle:1.2.3"
+        classpath "uk.co.cacoethes:lazybones-gradle:1.2.3"
     }
 }
 
@@ -25,19 +25,20 @@ apply plugin: "application"
 
 applicationName = "lazybones"
 mainClassName = "uk.co.cacoethes.lazybones.LazybonesMain"
-version = "0.8.3"
+version = "0.8.4"
 
 // These settings mimic the old client VM behavior. Should result in faster startup.
-applicationDefaultJvmArgs = ["-XX:+TieredCompilation", "-XX:TieredStopAtLevel=1", "-XX:CICompilerCount=3"]
+applicationDefaultJvmArgs = ["-XX:+TieredCompilation", "-XX:TieredStopAtLevel=1"]
 
-sourceCompatibility = "1.6"
-targetCompatibility = "1.6"
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 
 ext {
-    groovyVersion = "2.4.3"
+    groovyVersion = "3.0.0-rc-3"
     cachePath = new File(System.getProperty("user.home"), ".lazybones/templates").absolutePath
     isCiBuild = System.getProperty("drone.io") as boolean
     testWorkDir = file("$buildDir/testWork").path
+    spockVersion = "2.0-M2-groovy-3.0"
 }
 
 sourceSets {
@@ -75,7 +76,7 @@ dependencies {
 
     runtime "org.apache.ivy:ivy:2.3.0"
 
-    testCompile "org.spockframework:spock-core:0.7-groovy-2.0", {
+    testCompile "org.spockframework:spock-core:${spockVersion}", {
         exclude module: "groovy-all"
     }
 
