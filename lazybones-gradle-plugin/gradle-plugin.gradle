@@ -1,6 +1,7 @@
 apply plugin: "groovy"
 apply plugin: "maven"
 
+
 archivesBaseName = "lazybones-gradle"
 group = "uk.co.cacoethes"
 version = "1.2.4"
@@ -8,6 +9,13 @@ version = "1.2.4"
 sourceCompatibility = "1.6"
 targetCompatibility = "1.6"
 
+ext {
+    groovyVersion = "3.0.0-rc-3"
+    cachePath = new File(System.getProperty("user.home"), ".lazybones/templates").absolutePath
+    isCiBuild = System.getProperty("drone.io") as boolean
+    testWorkDir = file("$buildDir/testWork").path
+    spockVersion = "1.0-groovy-2.4"
+}
 repositories {
     mavenCentral()
 }
@@ -17,7 +25,7 @@ dependencies {
     // to specify localGroovy() too
     compile localGroovy(), gradleApi()
 
-    testCompile "org.spockframework:spock-core:0.7-groovy-2.0", {
+    testCompile "org.spockframework:spock-core:${spockVersion}", {
         exclude module: "groovy-all"
     }
     testCompile "cglib:cglib-nodep:2.2.2"

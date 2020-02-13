@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         // Keep this for testing dev versions of the lazybones-templates plugin
-//        classpath "uk.co.cacoethes:lazybones-gradle:1.2.3"
+        classpath "uk.co.cacoethes:lazybones-gradle:1.2.3"
     }
 }
 
@@ -17,27 +17,29 @@ plugins {
     id "net.saliman.cobertura" version "2.2.7"
     id "uk.co.cacoethes.lazybones-templates" version "1.2.3"
     id "io.sdkman.vendors" version "1.1.0"
+    id 'jacoco'
 }
 
 apply plugin: "groovy"
 apply plugin: "application"
-apply plugin: "codenarc"
+// apply plugin: "codenarc"
 
 applicationName = "lazybones"
 mainClassName = "uk.co.cacoethes.lazybones.LazybonesMain"
-version = "0.8.3"
+version = "0.8.4"
 
 // These settings mimic the old client VM behavior. Should result in faster startup.
-applicationDefaultJvmArgs = ["-XX:+TieredCompilation", "-XX:TieredStopAtLevel=1", "-XX:CICompilerCount=3"]
+applicationDefaultJvmArgs = ["-XX:+TieredCompilation", "-XX:TieredStopAtLevel=1"]
 
-sourceCompatibility = "1.6"
-targetCompatibility = "1.6"
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 
 ext {
-    groovyVersion = "2.4.3"
+    groovyVersion = "3.0.0-rc-3"
     cachePath = new File(System.getProperty("user.home"), ".lazybones/templates").absolutePath
     isCiBuild = System.getProperty("drone.io") as boolean
     testWorkDir = file("$buildDir/testWork").path
+    spockVersion = "2.0-M2-groovy-3.0"
 }
 
 sourceSets {
@@ -75,7 +77,7 @@ dependencies {
 
     runtime "org.apache.ivy:ivy:2.3.0"
 
-    testCompile "org.spockframework:spock-core:0.7-groovy-2.0", {
+    testCompile "org.spockframework:spock-core:${spockVersion}", {
         exclude module: "groovy-all"
     }
 
@@ -178,55 +180,55 @@ task packageReports(type: Zip) {
 
 integTest.finalizedBy packageReports
 
-codenarc {
-    configFile = rootProject.file("codenarc.groovy")
-}
-codenarcMain.excludes = ["**/NameType.groovy"]
-codenarcTest.enabled = false
-codenarcIntegTest.enabled = false
+// codenarc {
+//     configFile = rootProject.file("codenarc.groovy")
+// }
+// codenarcMain.excludes = ["**/NameType.groovy"]
+// codenarcTest.enabled = false
+// codenarcIntegTest.enabled = false
 
-/** Cobertura (Coverage) Configuration */
-cobertura {
-    coverageFormats = ['html', 'xml']
-    coverageSourceDirs = sourceSets.main.allSource.srcDirs
-}
+// /** Cobertura (Coverage) Configuration */
+// cobertura {
+//     coverageFormats = ['html', 'xml']
+//     coverageSourceDirs = sourceSets.main.allSource.srcDirs
+// }
 
-distZip.dependsOn("test", "integTest")
-check.dependsOn("test", "integTest")
+// distZip.dependsOn("test", "integTest")
+// check.dependsOn("test", "integTest")
 
-task uploadDist(type: BintrayGenericUpload, dependsOn: "distZip") {
-    artifactFile = distZip.archivePath
-    artifactUrlPath = "lazybones/${version}/${distZip.archiveName}"
-    repositoryName = "pledbrook/lazybones-templates"
-    packageName = "lazybones"
-    licenses = ["Apache-2.0"]
-}
+// task uploadDist(type: BintrayGenericUpload, dependsOn: "distZip") {
+//     artifactFile = distZip.archivePath
+//     artifactUrlPath = "lazybones/${version}/${distZip.archiveName}"
+//     repositoryName = "pledbrook/lazybones-templates"
+//     packageName = "lazybones"
+//     licenses = ["Apache-2.0"]
+// }
 
-task release(dependsOn: ["uploadDist", "sdkMajorRelease"])
-sdkMajorRelease.mustRunAfter uploadDist
+// task release(dependsOn: ["uploadDist", "sdkMajorRelease"])
+// sdkMajorRelease.mustRunAfter uploadDist
 
-// Lazy initialisation of uploadDist task so that not all build users need to
-// set the repo.* project properties.
-//
-// We also lazily configure the cache directory system property when running
-// the integration tests. This is to ensure that the test-tmpl template gets
-// installed into the cache directory being used by the integration tests.
-gradle.taskGraph.whenReady { graph ->
-    if (graph.hasTask(":lazybones-app:uploadDist")) {
-        verifyProperty(project, 'repo.username')
-        verifyProperty(project, 'repo.apiKey')
+// // Lazy initialisation of uploadDist task so that not all build users need to
+// // set the repo.* project properties.
+// //
+// // We also lazily configure the cache directory system property when running
+// // the integration tests. This is to ensure that the test-tmpl template gets
+// // installed into the cache directory being used by the integration tests.
+// gradle.taskGraph.whenReady { graph ->
+//     if (graph.hasTask(":lazybones-app:uploadDist")) {
+//         verifyProperty(project, 'repo.username')
+//         verifyProperty(project, 'repo.apiKey')
 
-        uploadDist.username = project.'repo.username'
-        uploadDist.apiKey = project.'repo.apiKey'
-    }
+//         uploadDist.username = project.'repo.username'
+//         uploadDist.apiKey = project.'repo.apiKey'
+//     }
 
-    if (graph.hasTask(":lazybones-app:sdkMajorRelease")) {
-        verifyProperty(project, 'gvm.consumerKey')
-        verifyProperty(project, 'gvm.consumerToken')
-        sdkMajorRelease.consumerKey = project.'gvm.consumerKey'
-        sdkMajorRelease.consumerToken = project.'gvm.consumerToken'
-    }
-}
+//     if (graph.hasTask(":lazybones-app:sdkMajorRelease")) {
+//         verifyProperty(project, 'gvm.consumerKey')
+//         verifyProperty(project, 'gvm.consumerToken')
+//         sdkMajorRelease.consumerKey = project.'gvm.consumerKey'
+//         sdkMajorRelease.consumerToken = project.'gvm.consumerToken'
+//     }
+// }
 
 void verifyProperty(Project proj, String name) {
     if (!project.hasProperty(name)) {

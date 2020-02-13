@@ -1,7 +1,6 @@
 package uk.co.cacoethes.gradle.tasks
 
 import org.gradle.testfixtures.ProjectBuilder
-
 import spock.lang.Shared
 import spock.lang.Specification
 

@@ -1,5 +1,32 @@
-Lazybones Project Creation Tool
-===============================
+# HBV204M Details
+
+The project (original readme reproduced below) is an excellent scaffolding
+program which has fallen into disuse. Though it can still be installed with
+`sdkman`, initializing templates causes a displeasing plethora of depreciation
+warnings and other debris to be printed. Further, it cannot be compiled from the
+source repository anymore. This project aims to fix these issues **and nothing
+else**.
+
+## Goals
+
+The exact goals are simple:
+
+- Ensure clean builds
+- Add coverage tests
+- Generally improve tests
+- Update `sdkman` binary
+- _(optional)_ Add templates
+
+## Running
+
+Details are [in the wiki](https://gitlab.com/HaoZeke/hbv204m/-/wikis/Software-Quality-Management-Plan#build-system), but generally, given the right JVM (13), you should be
+able to simply use the wrapper:
+
+```sh
+./gradlew
+```
+
+# Lazybones Project Creation Tool
 
 Lazybones was born out of frustration that [Ratpack](https://ratpack.io)
 does not and will not have a command line tool that will bootstrap a project.
@@ -21,18 +48,17 @@ extras (controllers, scaffolding etc.) inside a project.
 
 ## Developers
 
-* [Peter Ledbrook](https://github.com/pledbrook)
-* [Kyle Boon](https://github.com/kyleboon)
-* [Tommy Barker](https://github.com/tbarker9)
+- [Peter Ledbrook](https://github.com/pledbrook)
+- [Kyle Boon](https://github.com/kyleboon)
+- [Tommy Barker](https://github.com/tbarker9)
 
 ## Contributors
 
-* [Luke Daley](https://github.com/alkemist)
-* [Tomas Lin](https://github.com/tomaslin)
-* [Russell Hart](https://github.com/rhart)
-* [Dave Syer](https://github.com/dsyer)
-* [Andy Duncan](https://github.com/andyjduncan)
-
+- [Luke Daley](https://github.com/alkemist)
+- [Tomas Lin](https://github.com/tomaslin)
+- [Russell Hart](https://github.com/rhart)
+- [Dave Syer](https://github.com/dsyer)
+- [Andy Duncan](https://github.com/andyjduncan)
 
 ## Running it
 
@@ -54,16 +80,16 @@ So if you wanted to create a skeleton Ratpack project in a new 'my-rat-app'
 directory you would run
 
     lazybones create ratpack 1.2.0 my-rat-app
-    
+
 The version is optional and if you leave it out, Lazybones will install the
-latest version of the template it can find. 
+latest version of the template it can find.
 
 Named templates are all stored on Bintray. By default, Lazybones searches for
 templates in the pledbrook/lazybones-templates repository, but you can use
 other Bintray repositories by adding some configuration - set the Custom
 Repositories section under Configuration later in this document.
 
-You're not limited to only Bintray as you can install templates directly from 
+You're not limited to only Bintray as you can install templates directly from
 a URL too:
 
     lazybones create http://dl.bintray.com/kyleboon/lazybones/java-basic-template-0.1.zip my-app
@@ -127,7 +153,7 @@ template named `controller`. To use it, just `cd` into the project directory
 and run
 
     lazybones generate controller
-    
+
 This will probably ask you for the name of the controller and its package before
 generating the corresponding controller file in your project. You can reuse the
 command to create as many controllers as you need.
@@ -136,13 +162,13 @@ As with the `create` command, you can also pass in property values on the comman
 line if the subtemplate is parameterised:
 
     lazybones generate controller -Ppackage=org.example.myapp -Pclass=Book
-    
+
 The last option available to you as a user is template qualifiers. These only
 work if the subtemplate supports them, but they allow you to pass additional
 information in a concise way:
 
     lazybones generate artifact::controller
-    
+
 In this case, the template name is `artifact`, but we have qualified it with
 an extra `controller`. You can pass in as many qualifiers as you want, you just
 separate them with `::`.
@@ -156,7 +182,7 @@ so there can only be one version available to you.
 To see what templates you can install, run
 
     lazybones list
- 
+
 This will list all aliases and remote templates. If you want to see what
 templates you have cached locally, run
 
@@ -178,23 +204,24 @@ does allow you to override the default behaviour via a fixed set of configuratio
 options. These options can be provided in a number of ways following a set order
 of precedence:
 
-1.   System properties of the form `lazybones.*`, which can be passed into the app
-via either `JAVA_OPTS` or `LAZYBONES_OPTS` environment variables. For example:
+1.  System properties of the form `lazybones.*`, which can be passed into the app
+    via either `JAVA_OPTS` or `LAZYBONES_OPTS` environment variables. For example:
 
-        env JAVA_OPTS="-Dlazybones.config.file=/path/to/my-custom-default-config.groovy" lazybones ...
+            env JAVA_OPTS="-Dlazybones.config.file=/path/to/my-custom-default-config.groovy" lazybones ...
+
 
     Highest precedence, i.e. it overrides all other sources of setting data.
 
-2.   User configuration file in `$USER_HOME/.lazybones/config.groovy`. This is parsed
-using Groovy's `ConfigSlurper`, so if you're familiar with that syntax you'll be
-right at home. Otherwise, just see the examples below.
+2.  User configuration file in `$USER_HOME/.lazybones/config.groovy`. This is parsed
+    using Groovy's `ConfigSlurper`, so if you're familiar with that syntax you'll be
+    right at home. Otherwise, just see the examples below.
 
-3.   (Since 0.8) A JSON configuration file in `$USER_HOME/.lazybones/managed-config.groovy`
-that is used by the `config` commands. You can edit it this as well.
+3.  (Since 0.8) A JSON configuration file in `$USER_HOME/.lazybones/managed-config.groovy`
+    that is used by the `config` commands. You can edit it this as well.
 
-4.   A Groovy-based default configuration file that is provided by the application
-itself, but you can specify an alternative file via the `lazybones.config.file`
-system property.
+4.  A Groovy-based default configuration file that is provided by the application
+    itself, but you can specify an alternative file via the `lazybones.config.file`
+    system property.
 
 Lazybones also provides a convenient mechanism for setting and removing options
 via the command line: the `config` command.
@@ -209,31 +236,31 @@ run a sub-command via
 
 where `<sub-cmd>` is one of:
 
-*   `set <option> <value> [<value> ...]`
+- `set <option> <value> [<value> ...]`
 
-    Allows you to change the value of a configuration setting. Multiple values are
-    treated as a single array/list value. The new value replaces any existing one.
+  Allows you to change the value of a configuration setting. Multiple values are
+  treated as a single array/list value. The new value replaces any existing one.
 
-*   `add <option> <value>`
+- `add <option> <value>`
 
-    Appends an extra value to an existing array/list setting. Reports an error if
-    the setting doesn't accept multiple values. If the setting doesn't already have
-    a value, this command will initialise it with an array containing the given
-    value.
+  Appends an extra value to an existing array/list setting. Reports an error if
+  the setting doesn't accept multiple values. If the setting doesn't already have
+  a value, this command will initialise it with an array containing the given
+  value.
 
-*   `clear <option>`
+- `clear <option>`
 
-    Removes a setting from the configuration, effectively reverting it to whatever
-    the internal default is.
+  Removes a setting from the configuration, effectively reverting it to whatever
+  the internal default is.
 
-*   `show [--all] <option>`
+- `show [--all] <option>`
 
-    Shows the current value of a setting. You can use the `--all` argument (without
-    a setting name) to display all the current settings and their values.
+  Shows the current value of a setting. You can use the `--all` argument (without
+  a setting name) to display all the current settings and their values.
 
-*   `list`
+- `list`
 
-    Displays all the configuration settings supported by Lazybones.
+  Displays all the configuration settings supported by Lazybones.
 
 So what configuration settings are you likely to customise?
 
@@ -298,7 +325,7 @@ proxy, you only need to add the following to your Lazybones configuration:
             proxyPort = 8181
         }
     }
-    
+
 To avoid potential configuration issues, use the same proxy settings for HTTP and
 HTTPS if possible.
 
@@ -333,13 +360,13 @@ or via `--verbose`, `--quiet`, and `--info` options:
 
 The logging level can be one of:
 
-* OFF
-* SEVERE
-* WARNING
-* INFO
-* FINE
-* FINEST
-* ALL
+- OFF
+- SEVERE
+- WARNING
+- INFO
+- FINE
+- FINEST
+- ALL
 
 ## Building it
 
@@ -436,8 +463,7 @@ src/templates/my-template/VERSION with the contents
 That's it! The VERSION file will automatically be excluded from the project
 template archive.
 
-Contributing templates
-----------------------
+## Contributing templates
 
 Read the [Template Developers Guide](https://github.com/pledbrook/lazybones/wiki/Template-developers-guide)
 for information on how to create and publish Lazybones templates.
