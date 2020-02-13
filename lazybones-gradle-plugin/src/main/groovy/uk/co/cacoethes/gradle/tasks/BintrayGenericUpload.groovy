@@ -1,8 +1,12 @@
 package uk.co.cacoethes.gradle.tasks
 
 import groovy.json.JsonBuilder
-import org.gradle.api.*
-import org.gradle.api.tasks.*
+import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.TaskAction
 
 /**
  * Task for uploading artifacts to a generic Bintray repository.

@@ -4,7 +4,6 @@ import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.Rule
 import org.gradle.api.tasks.bundling.Zip
-
 import uk.co.cacoethes.gradle.lazybones.LazybonesConventions
 
 /**
